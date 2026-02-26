@@ -82,7 +82,7 @@
                                 <div class="flex items-center justify-end space-x-2">
                                     <!-- Edit Button -->
                                     <button
-                                        onclick="openEditModal('{{ $student['lrn'] }}', '{{ $student['first_name'] }}', '{{ $student['middle_name'] }}', '{{ $student['last_name'] }}', '{{ $student['age'] }}', '{{ $student['yearLevel'] }}', '{{ $student['section'] }}')"
+                                        onclick="openEditModal('{{ $student->id }}', '{{ $student->student_lrn }}', '{{ $student->first_name }}', '{{ $student->middle_name }}', '{{ $student->last_name }}', '{{ $student->age }}', '{{ $student->year_level }}', '{{ $student->section }}')"
                                         class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300 transition-all"
                                         title="Edit">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,7 +237,7 @@
             <p class="text-gray-400 text-sm mb-6">Update student information below.</p>
 
             <!-- Form -->
-            <form action="#" method="POST" class="space-y-4">
+            <form id="editStudentForm" action="" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
 
@@ -246,14 +246,14 @@
                         <!-- Student LRN -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-300 mb-1.5">Student LRN</label>
-                            <input type="text" name="lrn" id="edit_lrn"
+                            <input type="text" name="student_lrn" id="edit_lrn"
                                 class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all">
                         </div>
 
                         <!-- Name -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-300 mb-1.5">Middle Name</label>
-                            <input type="text" name="name" id="edit_middle_name"
+                            <input type="text" name="middle_name" id="edit_middle_name"
                                 class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all">
                         </div>
 
@@ -283,14 +283,14 @@
                         <!-- Name -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-300 mb-1.5">First Name</label>
-                            <input type="text" name="name" id="edit_first_name"
+                            <input type="text" name="first_name" id="edit_first_name"
                                 class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all">
                         </div>
 
                         <!-- Name -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-300 mb-1.5">Last Name</label>
-                            <input type="text" name="name" id="edit_last_name"
+                            <input type="text" name="last_name" id="edit_last_name"
                                 class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all">
                         </div>
 
@@ -355,16 +355,16 @@
         let deleteTargetName = '';
 
         // --- Open Edit Modal ---
-        function openEditModal(lrn, first_name, middle_name, last_name, age, yearLevel, section) {
-            document.getElementById('edit_lrn').value = lrn;
+        function openEditModal(id, student_lrn, first_name, middle_name, last_name, age, year_level, section) {
+            document.getElementById('editStudentForm').action = '/ma/students/' + id;
+            document.getElementById('edit_lrn').value = student_lrn;
             document.getElementById('edit_first_name').value = first_name;
             document.getElementById('edit_middle_name').value = middle_name;
             document.getElementById('edit_last_name').value = last_name;
             document.getElementById('edit_age').value = age;
-            document.getElementById('edit_year_level').value = yearLevel;
+            document.getElementById('edit_year_level').value = year_level;
             document.getElementById('edit_section').value = section;
             document.getElementById('editStudentModal').classList.remove('hidden');
-            showToast('Editing student: ' + first_name + ' ' + last_name, 'info');
         }
 
         // --- Delete Confirmation ---
@@ -372,12 +372,6 @@
             deleteTargetName = firstName + ' ' + lastName;
             document.getElementById('deleteStudentName').textContent = deleteTargetName;
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
-        }
-
-        function confirmDelete() {
-            document.getElementById('deleteConfirmModal').classList.add('hidden');
-            showToast('Student "' + deleteTargetName + '" has been deleted successfully.', 'success');
-            // TODO: Add actual delete logic (e.g., form submission or AJAX call)
         }
     </script>
 

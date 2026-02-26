@@ -67,7 +67,19 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $validated = $request->validate([
+            'student_lrn' => 'required|digits:12|unique:students,student_lrn,'.$student->id,
+            'first_name' => 'required|max:30',
+            'middle_name' => 'nullable|max:30',
+            'last_name' => 'required|max:30',
+            'age' => 'required|integer|min:1',
+            'year_level' => 'required|max:15',
+            'section' => 'required|max:30',
+        ]);
+
+        $student->update($validated);
+
+        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
     }
 
     /**
