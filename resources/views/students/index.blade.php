@@ -92,7 +92,7 @@
                                     </button>
                                     <!-- Delete Button -->
                                     <button
-                                        onclick="openDeleteModal('{{ $student['first_name'] }}', '{{ $student['last_name'] }}')"
+                                        onclick="openDeleteModal('{{ $student->id }}', '{{ $student->first_name }}', '{{ $student->last_name }}')"
                                         class="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all"
                                         title="Delete">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -342,10 +342,14 @@
                         class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">
                         Cancel
                     </button>
-                    <button onclick="confirmDelete()"
-                        class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-semibold transition-all hover:shadow-lg hover:shadow-red-500/30">
-                        Delete
-                    </button>
+                    <form id="deleteStudentForm" action="" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-semibold transition-all hover:shadow-lg hover:shadow-red-500/30">
+                            Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -368,8 +372,9 @@
         }
 
         // --- Delete Confirmation ---
-        function openDeleteModal(firstName, lastName) {
+        function openDeleteModal(id, firstName, lastName) {
             deleteTargetName = firstName + ' ' + lastName;
+            document.getElementById('deleteStudentForm').action = '/ma/students/' + id;
             document.getElementById('deleteStudentName').textContent = deleteTargetName;
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
         }
